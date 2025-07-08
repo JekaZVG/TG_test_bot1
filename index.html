@@ -299,15 +299,21 @@
                 document.getElementById('userName').textContent = `👋 Привет, ${userName}!`;
                 document.getElementById('userInfo').style.display = 'block';
             }
+
+            // Настройка главной кнопки Telegram
+            tg.MainButton.setText('🎯 Получить предсказание');
+            tg.MainButton.show();
+            tg.MainButton.onClick(() => {
+                generatePrediction();
+            });
         }
 
-        // Хранение использованных предсказаний (используем переменную вместо localStorage)
+        // Хранение использованных предсказаний
         let usedPredictions = [];
         
         function generatePrediction() {
             const generateBtn = document.getElementById('generateBtn');
             const predictionText = document.getElementById('predictionText');
-            const buttonContainer = document.getElementById('buttonContainer');
             
             // Показать загрузку
             generateBtn.innerHTML = '<span class="loading"></span> Гадаю...';
@@ -341,15 +347,6 @@
                 // Добавить эффект блесток
                 createSparkles();
                 
-                // Отправить данные в Telegram (если нужно)
-                if (tg && tg.sendData) {
-                    tg.sendData(JSON.stringify({
-                        action: 'prediction_generated',
-                        prediction: prediction,
-                        timestamp: new Date().toISOString()
-                    }));
-                }
-                
             }, 1500);
         }
         
@@ -374,19 +371,6 @@
                     }
                 }, 3000);
             }
-        }
-        
-        // Обработчики для Telegram Web App (если доступны)
-        if (tg) {
-            // Обработчик для кнопки "Назад" в Telegram
-            tg.BackButton.onClick(() => {
-                tg.show();
-            });
-            
-            // Настройка главной кнопки Telegram
-            tg.MainButton.setText('🎯 Получить предсказание');
-            tg.MainButton.show();
-            tg.MainButton.onClick(generatePrediction);
         }
     </script>
 </body>
