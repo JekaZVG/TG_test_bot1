@@ -33,6 +33,7 @@
             text-align: center;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 20px; /* Добавлено для мобильных устройств */
         }
 
         .header {
@@ -171,9 +172,16 @@
             margin-bottom: 20px;
             font-size: 14px;
         }
+        
+        /* Добавлено для мобильных устройств */
+        .header-space {
+            height: 20px;
+        }
     </style>
 </head>
 <body>
+    <div class="header-space"></div> <!-- Добавлено для мобильных устройств -->
+    
     <div class="container">
         <div class="header">
             <h1 class="title">🎭 Веселые предсказания</h1>
@@ -290,7 +298,8 @@
         let tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
         
         if (tg) {
-            tg.expand();
+            // Убрали tg.expand() - главную причину проблемы
+            // tg.expand();
             
             // Показать информацию о пользователе, если доступна
             if (tg.initDataUnsafe?.user) {
@@ -300,12 +309,14 @@
                 document.getElementById('userInfo').style.display = 'block';
             }
 
-            // Настройка главной кнопки Telegram
+            // Убрали главную кнопку Telegram
+            /*
             tg.MainButton.setText('🎯 Получить предсказание');
             tg.MainButton.show();
             tg.MainButton.onClick(() => {
                 generatePrediction();
             });
+            */
         }
 
         // Хранение использованных предсказаний
