@@ -187,7 +187,7 @@
         <div class="crystal-ball">🔮</div>
 
         <div class="prediction-area">
-            <div id="predictionText" style="display: none;"></div>
+            <div id="predictionText" class="prediction-text" style="display: none;"></div>
         </div>
 
         <div id="buttonContainer">
@@ -202,7 +202,7 @@
     </div>
 
     <script>
-        // Массив веселых предсказаний (75+ штук)
+        // Массив веселых предсказаний
         const funnyPredictions = [
             "Сегодня вы найдете потерянный носок, но потеряете второй! 🧦",
             "Ваш холодильник сегодня будет особенно красноречивым! 🥶",
@@ -287,19 +287,22 @@
         ];
 
         // Инициализация Telegram Web App
-        let tg = window.Telegram.WebApp;
-        tg.expand();
-
-        // Показать информацию о пользователе, если доступна
-        if (tg.initDataUnsafe?.user) {
-            const user = tg.initDataUnsafe.user;
-            const userName = user.first_name + (user.last_name ? ' ' + user.last_name : '');
-            document.getElementById('userName').textContent = `👋 Привет, ${userName}!`;
-            document.getElementById('userInfo').style.display = 'block';
+        let tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+        
+        if (tg) {
+            tg.expand();
+            
+            // Показать информацию о пользователе, если доступна
+            if (tg.initDataUnsafe?.user) {
+                const user = tg.initDataUnsafe.user;
+                const userName = user.first_name + (user.last_name ? ' ' + user.last_name : '');
+                document.getElementById('userName').textContent = `👋 Привет, ${userName}!`;
+                document.getElementById('userInfo').style.display = 'block';
+            }
         }
 
-        // Отслеживание использованных предсказаний
-        let usedPredictions = JSON.parse(localStorage.getItem('usedPredictions') || '[]');
+        // Хранение использованных предсказаний (используем переменную вместо localStorage)
+        let usedPredictions = [];
         
         function generatePrediction() {
             const generateBtn = document.getElementById('generateBtn');
@@ -311,7 +314,7 @@
             generateBtn.disabled = true;
             
             // Добавить вибрацию (если доступна)
-            if (tg.HapticFeedback) {
+            if (tg && tg.HapticFeedback) {
                 tg.HapticFeedback.impactOccurred('medium');
             }
             
@@ -330,24 +333,21 @@
                 
                 // Добавить предсказание в использованные
                 usedPredictions.push(prediction);
-                localStorage.setItem('usedPredictions', JSON.stringify(usedPredictions));
                 
                 // Показать предсказание
                 predictionText.innerHTML = prediction;
                 predictionText.style.display = 'block';
                 
-                // Изменить кнопку
-                buttonContainer.innerHTML = `
-                    <button id="newPredictionBtn" class="generate-btn new-prediction-btn" onclick="generatePrediction()">
-                        🎲 Новое предсказание
-                    </button>
-                `;
+                // Изменить кнопку на "Новое предсказание"
+                generateBtn.innerHTML = '🎲 Новое предсказание';
+                generateBtn.className = 'generate-btn new-prediction-btn';
+                generateBtn.disabled = false;
                 
                 // Добавить эффект блесток
                 createSparkles();
                 
                 // Отправить данные в Telegram (если нужно)
-                if (tg.sendData) {
+                if (tg && tg.sendData) {
                     tg.sendData(JSON.stringify({
                         action: 'prediction_generated',
                         prediction: prediction,
@@ -374,20 +374,25 @@
                 
                 // Удалить блестки через 3 секунды
                 setTimeout(() => {
-                    sparkle.remove();
+                    if (sparkle.parentNode) {
+                        sparkle.remove();
+                    }
                 }, 3000);
             }
         }
         
-        // Обработчик для кнопки "Назад" в Telegram
-        tg.BackButton.onClick(() => {
-            tg.close();
-        });
-        
-        // Настройка главной кнопки Telegram (если нужно)
-        tg.MainButton.setText('🎯 Получить предсказание');
-        tg.MainButton.show();
-        tg.MainButton.onClick(generatePrediction);
+        // Обработчики для Telegram Web App (если доступны)
+        if (tg) {
+            // Обработчик для кнопки "Назад" в Telegram
+            tg.BackButton.onClick(() => {
+                tg.close();
+            });
+            
+            // Настройка главной кнопки Telegram
+            tg.MainButton.setText('🎯 Получить предсказание');
+            tg.MainButton.show();
+            tg.MainButton.onClick(generatePrediction);
+        }
     </script>
 </body>
 </html>
