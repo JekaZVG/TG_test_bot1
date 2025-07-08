@@ -313,11 +313,6 @@
             generateBtn.innerHTML = '<span class="loading"></span> Гадаю...';
             generateBtn.disabled = true;
             
-            // Добавить вибрацию (если доступна)
-            if (tg && tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('medium');
-            }
-            
             setTimeout(() => {
                 // Получить случайное предсказание
                 let availablePredictions = funnyPredictions.filter(p => !usedPredictions.includes(p));
