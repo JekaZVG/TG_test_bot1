@@ -20,7 +20,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 15px;
+            padding: 10px;
             color: #e8d7a9;
             text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
             overflow-x: hidden;
@@ -39,57 +39,54 @@
         }
 
         .container {
-            max-width: 95%;
             width: 100%;
-            max-width: 400px;
+            max-width: 95%;
             background: rgba(30, 15, 35, 0.7);
             backdrop-filter: blur(5px);
             border-radius: 12px;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8), 0 0 20px rgba(139, 0, 139, 0.3);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.8), 0 0 15px rgba(139, 0, 139, 0.3);
             border: 1px solid #5d2e68;
             position: relative;
             z-index: 1;
-            margin-top: 15px;
         }
 
         .header {
-            margin-bottom: 15px;
-            position: relative;
+            margin-bottom: 12px;
         }
 
         .title {
             font-family: 'Cinzel Decorative', cursive;
-            font-size: 28px;
+            font-size: 24px; /* Увеличен с 22px */
             font-weight: bold;
-            margin-bottom: 8px;
+            margin-bottom: 6px; /* Уменьшен отступ */
             background: linear-gradient(45deg, #d4af37, #b08d57, #8a6d3b);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             letter-spacing: 1px;
-            text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+            text-shadow: 0 0 6px rgba(212, 175, 55, 0.5);
         }
 
         .subtitle {
-            font-size: 14px;
+            font-size: 13px; /* Увеличен с 12px */
             opacity: 0.9;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             color: #c9b6a6;
         }
 
         .crystal-ball {
             position: relative;
-            margin: 15px auto;
-            width: 120px;
-            height: 120px;
+            margin: 10px auto;
+            width: 100px; /* Увеличен с 90px */
+            height: 100px; /* Увеличен с 90px */
             border-radius: 50%;
             background: radial-gradient(circle at 30% 30%, #1a1a2e, #0a0a16 70%);
             box-shadow: 
-                inset 0 0 40px rgba(0, 0, 0, 0.8),
-                0 0 20px rgba(75, 0, 130, 0.6),
-                0 0 40px rgba(139, 0, 139, 0.4);
+                inset 0 0 30px rgba(0, 0, 0, 0.8),
+                0 0 15px rgba(75, 0, 130, 0.6),
+                0 0 30px rgba(139, 0, 139, 0.4);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -105,53 +102,53 @@
             background: rgba(255, 255, 255, 0.15);
             top: 20%;
             left: 20%;
-            filter: blur(4px);
+            filter: blur(3px);
         }
 
         .crystal-ball-inner {
-            font-size: 50px;
+            font-size: 46px; /* Увеличен с 40px */
             animation: glow 3s ease-in-out infinite alternate;
         }
 
         @keyframes glow {
-            from { text-shadow: 0 0 5px #9370DB, 0 0 10px #9370DB; }
-            to { text-shadow: 0 0 15px #BA55D3, 0 0 30px #BA55D3; }
+            from { text-shadow: 0 0 4px #9370DB, 0 0 8px #9370DB; }
+            to { text-shadow: 0 0 12px #BA55D3, 0 0 24px #BA55D3; }
         }
 
         @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
-            25% { transform: translateY(-8px) rotate(2deg); }
+            25% { transform: translateY(-5px) rotate(2deg); }
             50% { transform: translateY(0px) rotate(0deg); }
-            75% { transform: translateY(-6px) rotate(-2deg); }
+            75% { transform: translateY(-4px) rotate(-2deg); }
         }
 
         .prediction-area {
-            min-height: 100px;
+            min-height: 80px; /* Увеличен с 70px */
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 15px 0;
+            margin: 10px 0;
             position: relative;
-            padding: 8px;
+            padding: 5px;
         }
 
         .prediction-text {
-            font-size: 16px;
-            line-height: 1.4;
-            padding: 15px;
+            font-size: 16px; /* Увеличен с 14px */
+            line-height: 1.4; /* Увеличен межстрочный интервал */
+            padding: 10px;
             background: rgba(20, 10, 25, 0.7);
-            border-radius: 8px;
+            border-radius: 6px;
             border: 1px solid #6b3f75;
             animation: slideIn 0.7s ease-out;
             position: relative;
             z-index: 2;
-            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
         }
 
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(15px);
+                transform: translateY(10px);
             }
             to {
                 opacity: 1;
@@ -163,14 +160,14 @@
             background: linear-gradient(45deg, #5d2e68, #8a2387);
             border: none;
             color: #f8e0b0;
-            padding: 12px 25px;
-            font-size: 18px;
+            padding: 12px 24px; /* Увеличен padding */
+            font-size: 16px; /* Увеличен с 14px */
             font-weight: bold;
-            border-radius: 6px;
+            border-radius: 5px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(93, 46, 104, 0.6), 0 0 8px rgba(138, 35, 135, 0.4);
-            margin: 10px;
+            box-shadow: 0 3px 10px rgba(93, 46, 104, 0.6), 0 0 5px rgba(138, 35, 135, 0.4);
+            margin: 8px;
             font-family: 'Cinzel Decorative', cursive;
             letter-spacing: 1px;
             position: relative;
@@ -191,7 +188,7 @@
 
         .generate-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(93, 46, 104, 0.8), 0 0 15px rgba(138, 35, 135, 0.6);
+            box-shadow: 0 5px 15px rgba(93, 46, 104, 0.8), 0 0 12px rgba(138, 35, 135, 0.6);
         }
 
         .generate-btn:hover::before {
@@ -210,19 +207,20 @@
 
         .new-prediction-btn {
             background: linear-gradient(45deg, #3a1c71, #d76d77);
-            box-shadow: 0 4px 12px rgba(58, 28, 113, 0.6), 0 0 8px rgba(215, 109, 119, 0.4);
+            box-shadow: 0 3px 10px rgba(58, 28, 113, 0.6), 0 0 5px rgba(215, 109, 119, 0.4);
         }
 
         .footer {
-            margin-top: 20px;
-            font-size: 13px;
+            margin-top: 10px;
+            font-size: 12px; /* Увеличен с 11px */
             opacity: 0.8;
             color: #b9a896;
+            line-height: 1.3;
         }
 
         .sparkles {
             position: absolute;
-            font-size: 20px;
+            font-size: 18px; /* Увеличен с 16px */
             animation: sparkle 2s ease-in-out infinite;
             z-index: 0;
         }
@@ -234,13 +232,13 @@
 
         .loading {
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(218, 165, 32, 0.3);
+            width: 18px; /* Увеличен с 16px */
+            height: 18px; /* Увеличен с 16px */
+            border: 2px solid rgba(218, 165, 32, 0.3);
             border-radius: 50%;
             border-top-color: #d4af37;
             animation: spin 1s linear infinite;
-            margin-right: 8px;
+            margin-right: 8px; /* Увеличен отступ */
             vertical-align: middle;
         }
 
@@ -250,27 +248,28 @@
 
         .telegram-user {
             background: rgba(45, 25, 50, 0.6);
-            border-radius: 6px;
-            padding: 8px;
-            margin-bottom: 15px;
-            font-size: 14px;
+            border-radius: 5px;
+            padding: 8px; /* Увеличен padding */
+            margin-bottom: 12px; /* Увеличен отступ */
+            font-size: 14px; /* Увеличен с 12px */
             border: 1px solid #7a4f84;
+            line-height: 1.4;
         }
 
         .candle {
             position: absolute;
-            width: 24px;
-            height: 48px;
-            bottom: -24px;
+            width: 18px;
+            height: 36px;
+            bottom: -18px;
             z-index: 0;
         }
 
         .candle.left {
-            left: 20px;
+            left: 15px;
         }
 
         .candle.right {
-            right: 20px;
+            right: 15px;
         }
 
         .candle::before {
@@ -279,38 +278,38 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(to right, #5d4037, #3e2723);
-            border-radius: 4px;
+            border-radius: 3px;
         }
 
         .candle::after {
             content: "";
             position: absolute;
-            top: -12px;
+            top: -9px;
             left: 50%;
             transform: translateX(-50%);
-            width: 12px;
-            height: 16px;
+            width: 9px;
+            height: 12px;
             background: linear-gradient(to bottom, #ff9800, #f44336);
             border-radius: 50% 50% 20% 20%;
-            box-shadow: 0 0 15px #ff5722, 0 0 30px #ff5722;
+            box-shadow: 0 0 10px #ff5722, 0 0 20px #ff5722;
             animation: flicker 0.5s infinite alternate;
         }
 
         @keyframes flicker {
-            0%, 100% { height: 16px; box-shadow: 0 0 15px #ff5722, 0 0 30px #ff5722; }
-            50% { height: 14px; box-shadow: 0 0 12px #ff9800, 0 0 25px #ff9800; }
+            0%, 100% { height: 12px; box-shadow: 0 0 10px #ff5722, 0 0 20px #ff5722; }
+            50% { height: 10px; box-shadow: 0 0 8px #ff9800, 0 0 16px #ff9800; }
         }
 
         .smoke {
             position: absolute;
-            top: -28px;
+            top: -21px;
             left: 50%;
             transform: translateX(-50%);
-            width: 8px;
-            height: 16px;
+            width: 6px;
+            height: 12px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
-            filter: blur(3px);
+            filter: blur(2px);
             animation: smoke 3s infinite;
             opacity: 0;
         }
@@ -318,7 +317,7 @@
         @keyframes smoke {
             0% { opacity: 0; transform: translateX(-50%) translateY(0) scale(0.5); }
             20% { opacity: 0.7; }
-            100% { opacity: 0; transform: translateX(-50%) translateY(-40px) scale(1.8); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-30px) scale(1.5); }
         }
 
         .candle .smoke:nth-child(1) { animation-delay: 0.5s; }
@@ -328,7 +327,7 @@
         .floating-particle {
             position: fixed;
             opacity: 0.2;
-            font-size: 16px;
+            font-size: 12px;
             color: #d4af37;
             z-index: 0;
             pointer-events: none;
@@ -544,21 +543,21 @@
                 // Добавить эффект блесток
                 createSparkles();
                 
-            }, 2000);
+            }, 1500);
         }
         
         function createSparkles() {
             const container = document.querySelector('.container');
             const sparkleEmojis = ['✨', '🌟', '💫', '⭐', '🔥', '🔮', '🌠'];
             
-            for (let i = 0; i < 8; i++) {
+            for (let i = 0; i < 6; i++) {
                 const sparkle = document.createElement('div');
                 sparkle.className = 'sparkles';
                 sparkle.textContent = sparkleEmojis[Math.floor(Math.random() * sparkleEmojis.length)];
                 sparkle.style.left = Math.random() * 100 + '%';
                 sparkle.style.top = Math.random() * 100 + '%';
                 sparkle.style.animationDelay = Math.random() * 2 + 's';
-                sparkle.style.fontSize = (Math.random() * 16 + 16) + 'px';
+                sparkle.style.fontSize = (Math.random() * 12 + 12) + 'px';
                 
                 container.appendChild(sparkle);
                 
@@ -576,7 +575,7 @@
             const body = document.querySelector('body');
             const types = ['❖', '✦', '✶', '✸', '✹', '✺', '✻'];
             
-            for (let i = 0; i < 15; i++) {
+            for (let i = 0; i < 10; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'floating-particle';
                 particle.textContent = types[Math.floor(Math.random() * types.length)];
@@ -584,7 +583,7 @@
                 particle.style.left = Math.random() * 100 + 'vw';
                 particle.style.top = Math.random() * 100 + 'vh';
                 particle.style.opacity = Math.random() * 0.3 + 0.1;
-                particle.style.fontSize = (Math.random() * 8 + 8) + 'px';
+                particle.style.fontSize = (Math.random() * 6 + 6) + 'px';
                 particle.style.color = ['#d4af37', '#9d5c9d', '#8a2387', '#6b3f75'][Math.floor(Math.random() * 4)];
                 particle.style.zIndex = '0';
                 particle.style.pointerEvents = 'none';
