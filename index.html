@@ -7,6 +7,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=MedievalSharp&display=swap" rel="stylesheet">
     <style>
+        /* Все стили остаются без изменений */
         * {
             margin: 0;
             padding: 0;
@@ -731,11 +732,10 @@
             }
         }
 
-        // Хранение использованных предсказаний
-        let usedPredictions = [];
-        let usedMotivations = [];
-        let currentAdvice = null;
-        let adviceGiven = false;
+        // Хранение использованных предсказаний и мотиваций в localStorage
+        let usedPredictions = JSON.parse(localStorage.getItem('usedPredictions')) || [];
+        let usedMotivations = JSON.parse(localStorage.getItem('usedMotivations')) || [];
+        let adviceGiven = false; // Совет не сохраняем
         
         // Установка активной кнопки
         function setActiveButton(button) {
@@ -789,6 +789,7 @@
                 
                 // Добавить предсказание в использованные
                 usedPredictions.push(prediction);
+                localStorage.setItem('usedPredictions', JSON.stringify(usedPredictions));
                 
                 // Показать предсказание
                 predictionText.innerHTML = prediction;
@@ -844,6 +845,7 @@
                 
                 // Добавить мотивацию в использованные
                 usedMotivations.push(motivation);
+                localStorage.setItem('usedMotivations', JSON.stringify(usedMotivations));
                 
                 // Показать мотивацию
                 predictionText.innerHTML = motivation;
@@ -897,7 +899,6 @@
                 const advice = adviceList[randomIndex];
                 
                 // Сохранить совет
-                currentAdvice = advice;
                 adviceGiven = true;
                 
                 // Показать совет
