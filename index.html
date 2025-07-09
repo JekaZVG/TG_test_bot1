@@ -54,6 +54,7 @@
 
         .header {
             margin-bottom: 12px;
+            position: relative;
         }
 
         .title {
@@ -435,6 +436,95 @@
             color: #b9a896;
             opacity: 0.8;
         }
+        
+        /* Музыкальный контроллер */
+        .music-control {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(93, 46, 104, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            border: 1px solid #d4af37;
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .music-control:hover {
+            transform: scale(1.1);
+            background: rgba(93, 46, 104, 0.9);
+        }
+        
+        .music-control i {
+            color: #d4af37;
+            font-size: 18px;
+        }
+        
+        .music-control .sound-on {
+            display: block;
+        }
+        
+        .music-control .sound-off {
+            display: none;
+        }
+        
+        .music-control.muted .sound-on {
+            display: none;
+        }
+        
+        .music-control.muted .sound-off {
+            display: block;
+        }
+        
+        .volume-slider-container {
+            position: absolute;
+            top: 50%;
+            right: 45px;
+            transform: translateY(-50%);
+            width: 100px;
+            height: 30px;
+            background: rgba(30, 15, 35, 0.9);
+            border-radius: 15px;
+            padding: 0 10px;
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            border: 1px solid #5d2e68;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .music-control:hover .volume-slider-container {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .volume-slider {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 4px;
+            border-radius: 2px;
+            background: linear-gradient(to right, #d4af37, #8a2387);
+            outline: none;
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #d4af37;
+            cursor: pointer;
+            border: 1px solid #8a2387;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
 
         /* Медиа-запрос для мобильных устройств */
         @media (max-width: 480px) {
@@ -469,10 +559,25 @@
                 font-size: 14px;
                 padding: 10px;
             }
+            
+            .music-control {
+                top: 10px;
+                right: 10px;
+            }
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <!-- Элемент управления музыкой -->
+    <div class="music-control">
+        <i class="fas fa-volume-up sound-on"></i>
+        <i class="fas fa-volume-mute sound-off"></i>
+        <div class="volume-slider-container">
+            <input type="range" min="0" max="1" step="0.01" value="0.3" class="volume-slider" id="volumeSlider">
+        </div>
+    </div>
+    
     <div class="candle left">
         <div class="smoke"></div>
         <div class="smoke"></div>
@@ -522,6 +627,11 @@
             <p>⚠️ Предсказания могут сбыться в самый неожиданный момент</p>
         </div>
     </div>
+    
+    <!-- Аудио элемент -->
+    <audio id="backgroundMusic" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2021/10/25/audio_6c5d8d1c0e.mp3?filename=interstellar-atmosphere-10721.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
         // Массив из 100 уникальных юмористических предсказаний
@@ -580,7 +690,7 @@
             "Сегодня ты поймешь, что не все нитки одинаково прочны... особенно на любимых трусах. 🩳🧵",
             "Жди приятной неожиданности! Дырки в новых носках прямо после покупки. 🧦🕳️",
             "Твоя удача сегодня будет в том, что автобус приедет... через час. 🚌⏳",
-            "Сегодня ты узнаешь, что не все супы одинаково вкусны... особенно когда пересолил. 🍜🧂",
+            "Сегодня ты узнаешь, что не все супы одинаково вкусны... особенно когда пересолил. �🧂",
             "Жди романтического вечера! С собой, пиццей и сериалом. 🍕📺❤️",
             "Твоя сила воли сегодня будет испытана... последней шоколадкой в шкафу. 🍫😖",
             "Сегодня ты поймешь, что не все коты одинаково пушисты... особенно когда линяют. 😾💨",
@@ -722,7 +832,7 @@
             "Возможно, если постараешься 💪",
             "Шансы 50/50 🎲",
             "Только если рискнешь 🎯",
-            "Лучже да, чем нет 👍",
+            "Лучше да, чем нет 👍",
             "Звезды не благоволят 🌌",
             "Это твой шанс! 🍀",
             "Не стоит усилий 🤷‍♂️",
@@ -1030,9 +1140,44 @@
             });
         }
         
+        // Инициализация управления музыкой
+        function initMusicControl() {
+            const musicControl = document.querySelector('.music-control');
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            const volumeSlider = document.getElementById('volumeSlider');
+            
+            // Установка громкости по умолчанию
+            backgroundMusic.volume = 0.3;
+            
+            // Переключение звука
+            musicControl.addEventListener('click', () => {
+                if (backgroundMusic.paused) {
+                    backgroundMusic.play();
+                    musicControl.classList.remove('muted');
+                } else {
+                    backgroundMusic.pause();
+                    musicControl.classList.add('muted');
+                }
+            });
+            
+            // Регулировка громкости
+            volumeSlider.addEventListener('input', () => {
+                backgroundMusic.volume = volumeSlider.value;
+            });
+            
+            // Автовоспроизведение после первого взаимодействия
+            document.body.addEventListener('click', function initPlay() {
+                if (backgroundMusic.paused) {
+                    backgroundMusic.play().catch(e => console.log('Автовоспроизведение не разрешено:', e));
+                }
+                document.body.removeEventListener('click', initPlay);
+            });
+        }
+        
         window.onload = function() {
             createFloatingParticles();
             initClickCounter();
+            initMusicControl();
         };
     </script>
 </body>
