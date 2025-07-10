@@ -7,6 +7,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=MedievalSharp&display=swap" rel="stylesheet">
     <style>
+        /* Все стили остаются без изменений */
         * {
             margin: 0;
             padding: 0;
@@ -851,6 +852,9 @@
         // Счетчик нажатий
         let totalClicks = parseInt(localStorage.getItem('totalClicks')) || 0;
         
+        // Флаг для отслеживания инициализации музыки
+        let musicInitialized = false;
+        
         // Инициализация счетчика
         function initClickCounter() {
             const clickCounter = document.getElementById('clickCounter');
@@ -869,6 +873,34 @@
             clickCounter.classList.remove('pulse');
             void clickCounter.offsetWidth;
             clickCounter.classList.add('pulse');
+        }
+        
+        // Инициализация музыки
+        function initBackgroundMusic() {
+            if (musicInitialized) return;
+            musicInitialized = true;
+            
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            const musicControl = document.querySelector('.music-control');
+            
+            backgroundMusic.volume = 0.3;
+            
+            // Попытка запустить музыку при взаимодействии
+            try {
+                const playPromise = backgroundMusic.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise
+                        .then(() => {
+                            musicControl.classList.remove('muted');
+                        })
+                        .catch(error => {
+                            console.error('Автовоспроизведение заблокировано:', error);
+                        });
+                }
+            } catch (error) {
+                console.error('Ошибка инициализации музыки:', error);
+            }
         }
         
         if (tg) {
@@ -900,6 +932,8 @@
         }
         
         function generatePrediction() {
+            // Инициализируем музыку при первом взаимодействии
+            initBackgroundMusic();
             updateClickCounter();
             
             const generateBtn = document.getElementById('generateBtn');
@@ -950,6 +984,8 @@
         }
         
         function generateMotivation() {
+            // Инициализируем музыку при первом взаимодействии
+            initBackgroundMusic();
             updateClickCounter();
             
             const generateBtn = document.getElementById('generateBtn');
@@ -1001,6 +1037,8 @@
         
         // Показать форму вопроса
         function showQuestionForm() {
+            // Инициализируем музыку при первом взаимодействии
+            initBackgroundMusic();
             updateClickCounter();
             
             const predictionText = document.getElementById('predictionText');
@@ -1046,6 +1084,10 @@
         
         // Получить ответ на вопрос
         function getAnswer() {
+            // Инициализируем музыку при первом взаимодействии
+            initBackgroundMusic();
+            updateClickCounter();
+            
             const predictionText = document.getElementById('predictionText');
             const generateBtn = document.getElementById('generateBtn');
             const motivationBtn = document.getElementById('motivationBtn');
@@ -1152,8 +1194,13 @@
             // Переключение звука
             musicControl.addEventListener('click', () => {
                 if (backgroundMusic.paused) {
-                    backgroundMusic.play();
-                    musicControl.classList.remove('muted');
+                    backgroundMusic.play()
+                        .then(() => {
+                            musicControl.classList.remove('muted');
+                        })
+                        .catch(error => {
+                            console.error('Воспроизведение не удалось:', error);
+                        });
                 } else {
                     backgroundMusic.pause();
                     musicControl.classList.add('muted');
@@ -1163,14 +1210,6 @@
             // Регулировка громкости
             volumeSlider.addEventListener('input', () => {
                 backgroundMusic.volume = volumeSlider.value;
-            });
-            
-            // Автовоспроизведение после первого взаимодействия
-            document.body.addEventListener('click', function initPlay() {
-                if (backgroundMusic.paused) {
-                    backgroundMusic.play().catch(e => console.log('Автовоспроизведение не разрешено:', e));
-                }
-                document.body.removeEventListener('click', initPlay);
             });
         }
         
