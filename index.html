@@ -571,7 +571,7 @@
 </head>
 <body>
     <!-- Элемент управления музыкой -->
-    <div class="music-control">
+    <div class="music-control muted">
         <i class="fas fa-volume-up sound-on"></i>
         <i class="fas fa-volume-mute sound-off"></i>
         <div class="volume-slider-container">
@@ -854,6 +854,7 @@
         
         // Флаг для отслеживания инициализации музыки
         let musicInitialized = false;
+        let musicPlaying = false;
         
         // Инициализация счетчика
         function initClickCounter() {
@@ -883,23 +884,27 @@
             const backgroundMusic = document.getElementById('backgroundMusic');
             const musicControl = document.querySelector('.music-control');
             
-            backgroundMusic.volume = 0.3;
+            backgroundMusic.volume = document.getElementById('volumeSlider').value;
             
-            // Попытка запустить музыку при взаимодействии
             try {
                 const playPromise = backgroundMusic.play();
                 
                 if (playPromise !== undefined) {
                     playPromise
                         .then(() => {
+                            musicPlaying = true;
                             musicControl.classList.remove('muted');
                         })
                         .catch(error => {
                             console.error('Автовоспроизведение заблокировано:', error);
+                            musicPlaying = false;
+                            musicControl.classList.add('muted');
                         });
                 }
             } catch (error) {
                 console.error('Ошибка инициализации музыки:', error);
+                musicPlaying = false;
+                musicControl.classList.add('muted');
             }
         }
         
@@ -1188,22 +1193,27 @@
             const backgroundMusic = document.getElementById('backgroundMusic');
             const volumeSlider = document.getElementById('volumeSlider');
             
-            // Установка громкости по умолчанию
-            backgroundMusic.volume = 0.3;
-            
             // Переключение звука
             musicControl.addEventListener('click', () => {
-                if (backgroundMusic.paused) {
+                // Если музыка еще не инициализирована, инициализируем
+                if (!musicInitialized) {
+                    initBackgroundMusic();
+                    return;
+                }
+
+                if (musicPlaying) {
+                    backgroundMusic.pause();
+                    musicControl.classList.add('muted');
+                    musicPlaying = false;
+                } else {
                     backgroundMusic.play()
                         .then(() => {
                             musicControl.classList.remove('muted');
+                            musicPlaying = true;
                         })
                         .catch(error => {
                             console.error('Воспроизведение не удалось:', error);
                         });
-                } else {
-                    backgroundMusic.pause();
-                    musicControl.classList.add('muted');
                 }
             });
             
