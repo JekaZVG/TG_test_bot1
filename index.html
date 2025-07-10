@@ -7,7 +7,6 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=MedievalSharp&display=swap" rel="stylesheet">
     <style>
-        /* Все стили остаются без изменений */
         * {
             margin: 0;
             padding: 0;
@@ -438,95 +437,6 @@
             opacity: 0.8;
         }
         
-        /* Музыкальный контроллер */
-        .music-control {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: rgba(93, 46, 104, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 10;
-            border: 1px solid #d4af37;
-            box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
-            transition: all 0.3s ease;
-        }
-        
-        .music-control:hover {
-            transform: scale(1.1);
-            background: rgba(93, 46, 104, 0.9);
-        }
-        
-        .music-control i {
-            color: #d4af37;
-            font-size: 18px;
-        }
-        
-        .music-control .sound-on {
-            display: block;
-        }
-        
-        .music-control .sound-off {
-            display: none;
-        }
-        
-        .music-control.muted .sound-on {
-            display: none;
-        }
-        
-        .music-control.muted .sound-off {
-            display: block;
-        }
-        
-        .volume-slider-container {
-            position: absolute;
-            top: 50%;
-            right: 45px;
-            transform: translateY(-50%);
-            width: 100px;
-            height: 30px;
-            background: rgba(30, 15, 35, 0.9);
-            border-radius: 15px;
-            padding: 0 10px;
-            display: flex;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            border: 1px solid #5d2e68;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-        
-        .music-control:hover .volume-slider-container {
-            opacity: 1;
-            pointer-events: all;
-        }
-        
-        .volume-slider {
-            width: 100%;
-            -webkit-appearance: none;
-            height: 4px;
-            border-radius: 2px;
-            background: linear-gradient(to right, #d4af37, #8a2387);
-            outline: none;
-        }
-        
-        .volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: #d4af37;
-            cursor: pointer;
-            border: 1px solid #8a2387;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-        }
-
         /* Медиа-запрос для мобильных устройств */
         @media (max-width: 480px) {
             .btn-container {
@@ -560,25 +470,11 @@
                 font-size: 14px;
                 padding: 10px;
             }
-            
-            .music-control {
-                top: 10px;
-                right: 10px;
-            }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Элемент управления музыкой -->
-    <div class="music-control muted">
-        <i class="fas fa-volume-up sound-on"></i>
-        <i class="fas fa-volume-mute sound-off"></i>
-        <div class="volume-slider-container">
-            <input type="range" min="0" max="1" step="0.01" value="0.3" class="volume-slider" id="volumeSlider">
-        </div>
-    </div>
-    
     <div class="candle left">
         <div class="smoke"></div>
         <div class="smoke"></div>
@@ -629,9 +525,15 @@
         </div>
     </div>
     
-    <!-- Аудио элемент -->
-    <audio id="backgroundMusic" loop>
-        <source src="https://cdn.pixabay.com/download/audio/2021/10/25/audio_6c5d8d1c0e.mp3?filename=interstellar-atmosphere-10721.mp3" type="audio/mpeg">
+    <!-- Звуковые эффекты (скрытые) -->
+    <audio id="buttonSound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-magic-sparkles-3004.mp3" type="audio/mp3">
+    </audio>
+    <audio id="predictionSound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-magical-spell-312.mp3" type="audio/mp3">
+    </audio>
+    <audio id="magicSound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-magic-wand-245.mp3" type="audio/mp3">
     </audio>
 
     <script>
@@ -852,9 +754,10 @@
         // Счетчик нажатий
         let totalClicks = parseInt(localStorage.getItem('totalClicks')) || 0;
         
-        // Флаг для отслеживания инициализации музыки
-        let musicInitialized = false;
-        let musicPlaying = false;
+        // Звуковые эффекты
+        const buttonSound = document.getElementById('buttonSound');
+        const predictionSound = document.getElementById('predictionSound');
+        const magicSound = document.getElementById('magicSound');
         
         // Инициализация счетчика
         function initClickCounter() {
@@ -876,35 +779,13 @@
             clickCounter.classList.add('pulse');
         }
         
-        // Инициализация музыки
-        function initBackgroundMusic() {
-            if (musicInitialized) return;
-            musicInitialized = true;
-            
-            const backgroundMusic = document.getElementById('backgroundMusic');
-            const musicControl = document.querySelector('.music-control');
-            
-            backgroundMusic.volume = document.getElementById('volumeSlider').value;
-            
+        // Воспроизведение звукового эффекта
+        function playSoundEffect(sound) {
             try {
-                const playPromise = backgroundMusic.play();
-                
-                if (playPromise !== undefined) {
-                    playPromise
-                        .then(() => {
-                            musicPlaying = true;
-                            musicControl.classList.remove('muted');
-                        })
-                        .catch(error => {
-                            console.error('Автовоспроизведение заблокировано:', error);
-                            musicPlaying = false;
-                            musicControl.classList.add('muted');
-                        });
-                }
+                sound.currentTime = 0;
+                sound.play();
             } catch (error) {
-                console.error('Ошибка инициализации музыки:', error);
-                musicPlaying = false;
-                musicControl.classList.add('muted');
+                console.error('Ошибка воспроизведения звука:', error);
             }
         }
         
@@ -937,8 +818,7 @@
         }
         
         function generatePrediction() {
-            // Инициализируем музыку при первом взаимодействии
-            initBackgroundMusic();
+            playSoundEffect(buttonSound);
             updateClickCounter();
             
             const generateBtn = document.getElementById('generateBtn');
@@ -985,12 +865,14 @@
                 crystalBall.style.animation = 'glow 3s ease-in-out infinite alternate, float 6s ease-in-out infinite';
                 createSparkles();
                 
+                // Воспроизведение звука предсказания
+                playSoundEffect(predictionSound);
+                
             }, 1500);
         }
         
         function generateMotivation() {
-            // Инициализируем музыку при первом взаимодействии
-            initBackgroundMusic();
+            playSoundEffect(buttonSound);
             updateClickCounter();
             
             const generateBtn = document.getElementById('generateBtn');
@@ -1037,13 +919,15 @@
                 crystalBall.style.animation = 'glow 3s ease-in-out infinite alternate, float 6s ease-in-out infinite';
                 createSparkles();
                 
+                // Воспроизведение звука предсказания
+                playSoundEffect(predictionSound);
+                
             }, 1500);
         }
         
         // Показать форму вопроса
         function showQuestionForm() {
-            // Инициализируем музыку при первом взаимодействии
-            initBackgroundMusic();
+            playSoundEffect(buttonSound);
             updateClickCounter();
             
             const predictionText = document.getElementById('predictionText');
@@ -1089,8 +973,7 @@
         
         // Получить ответ на вопрос
         function getAnswer() {
-            // Инициализируем музыку при первом взаимодействии
-            initBackgroundMusic();
+            playSoundEffect(buttonSound);
             updateClickCounter();
             
             const predictionText = document.getElementById('predictionText');
@@ -1123,6 +1006,9 @@
                 
                 crystalBall.style.animation = 'glow 3s ease-in-out infinite alternate, float 6s ease-in-out infinite';
                 createSparkles();
+                
+                // Воспроизведение магического звука
+                playSoundEffect(magicSound);
                 
             }, 1500);
         }
@@ -1187,46 +1073,9 @@
             });
         }
         
-        // Инициализация управления музыкой
-        function initMusicControl() {
-            const musicControl = document.querySelector('.music-control');
-            const backgroundMusic = document.getElementById('backgroundMusic');
-            const volumeSlider = document.getElementById('volumeSlider');
-            
-            // Переключение звука
-            musicControl.addEventListener('click', () => {
-                // Если музыка еще не инициализирована, инициализируем
-                if (!musicInitialized) {
-                    initBackgroundMusic();
-                    return;
-                }
-
-                if (musicPlaying) {
-                    backgroundMusic.pause();
-                    musicControl.classList.add('muted');
-                    musicPlaying = false;
-                } else {
-                    backgroundMusic.play()
-                        .then(() => {
-                            musicControl.classList.remove('muted');
-                            musicPlaying = true;
-                        })
-                        .catch(error => {
-                            console.error('Воспроизведение не удалось:', error);
-                        });
-                }
-            });
-            
-            // Регулировка громкости
-            volumeSlider.addEventListener('input', () => {
-                backgroundMusic.volume = volumeSlider.value;
-            });
-        }
-        
         window.onload = function() {
             createFloatingParticles();
             initClickCounter();
-            initMusicControl();
         };
     </script>
 </body>
